@@ -54,8 +54,59 @@ mapTransactionDescriptions() - Возвращает новый массив, с�
 ```
 
 ## Примеры использования проекта
+Функция, которая определяет сумму дебетовых транзакций.
+```javascript
+calculateTotalDebitAmount() { 
+        return this.getTransactionByType("debit").reduce((sum, t) => sum + t.transaction_amount, 0);
+    }
 
-## Контрольный вопросы
+console.log(analyzer.calculateTotalDebitAmount());
+```
+Результат в консоли:
+```javascript
+7180
+```
+
+Функция, которая производит поиск транзакций по айди
+```javascript
+findTransactionById(id) { 
+        return this.transactions.find((t) => t.transaction_id == id);
+    }
+
+console.log(analyzer.findTransactionById(13));
+```
+Результат в консоли:
+```javascript
+{
+  transaction_id: '13',
+  transaction_date: '2019-01-13',
+  transaction_amount: 85,
+  transaction_type: 'debit',
+  transaction_description: 'Home appliances purchase',
+  merchant_name: 'ApplianceStoreXYZ',
+  card_type: 'Discover'
+}
+```
+
+Функция, выводящая номер месяца, в котором больше дебетовых транзакций.
+```javascript
+findMostDebitTransactionMonth() {
+        const counts = {};
+        for (const t of this.getTransactionByType("debit")) {
+            const month = new Date(t.transaction_date).getMonth();
+            counts[month] = (counts[month] || 0) + 1;
+        }
+        return Object.keys(counts).reduce((a, b) => (counts[a] > counts[b] ? a : b));
+    }
+
+console.log(analyzer.findMostDebitTransactionMonth());
+```
+Результат в консоли :
+```javascript
+3
+```
+
+## Контрольные вопросы
 **1. Какие примитивные типы данных существуют в JavaScript?**
 - Строка (string)
 - Число (number)
