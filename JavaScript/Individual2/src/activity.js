@@ -39,3 +39,4 @@ function updateActivity() {
   }
 }
 
+export { getRandomActivity, updateActivity };
