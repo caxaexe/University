@@ -3,7 +3,7 @@
 
 ## Инструкция по запуску проекта
 - Установить `Node.js`
-- Запускать index.html ..
+- Для правильной работы всех функций на html странице требуется запустить локальный веб-сервер.
 
 ## Описание индивидуальной работы
 "Капитан Смит часто ощущает скуку, так как его дни полностью заполнены поездками с одного места на другое. Мы можем помочь ему найти занятие по душе.
@@ -11,10 +11,39 @@
 Для этого нам нужно разработать мини-приложение, которое будет предлагать капитану Смиту новое занятие при каждом обновлении."
 
 ## Краткая документация к проекту
-...
+Асинхронные функции `getRandomActivity()` и `updateActivity()` играют важную роль в данном проекте, так как они выполняют основную работу, благодаря которой на странице `index.html` появляется случайный текст с действием.
+
+```javascript
+async function getRandomActivity() {
+  try {
+    const response = await fetch('http://www.boredapi.com/api/activity/');
+    const data = await response.json();
+    currentActivity = data.activity;
+    updateActivity();
+    return currentActivity;
+  } catch (error) {
+    console.error("К сожалению, произошла ошибка");
+    return null;
+  } finally {
+    setTimeout(getRandomActivity, 60000); 
+  }
+}
+```
+
+```javascript
+function updateActivity() {
+  if (currentActivity) {
+    const activityElement = document.getElementById('activity');
+    activityElement.textContent = currentActivity;
+  } else {
+        console.log("Не удалось получить активность");
+  }
+}
+```
 
 ## Примеры использования проекта
-...
+![image](https://github.com/caxaexe/University/assets/149768960/dac38967-1101-45e9-a486-fb330eee11c6)
+
 
 ## Контрольные вопросы
 **Какое значение возвращает функция fetch?**<br>
