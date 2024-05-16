@@ -11,7 +11,7 @@ function processString(str) {
             stack.push(char);
         }
     }   
-    return stack.join(""); // join объединяет элементы массива
+    return stack.join("");
 }
 
 console.log(processString("abc#d##c"));
@@ -23,7 +23,7 @@ console.log(processString("abc##d######"));
 function getMiddle(str) {
     const half = Math.floor(str.length / 2);
     if (str.length % 2 == 0) {
-        return str.slice(half - 1, half + 1); // slice извлекает подстроку. первый элемент включительно, второй нет
+        return str.slice(half - 1, half + 1);
     } else {
         return str[half]; 
     }
