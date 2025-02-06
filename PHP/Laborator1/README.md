@@ -34,7 +34,7 @@ echo "Привет, мир!";
 **Второе задание.** Вывод данных в PHP, используя функции `echo` и `print`.
 ```
 echo "Hello, World with echo!";
-echo "Hello, World with print!";
+print "Hello, World with print!";
 ```
 
 **Третье задание.** Работа с переменными и выводом.  
