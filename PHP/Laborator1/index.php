@@ -5,7 +5,7 @@ echo "Привет, мир!";
 echo "<br>--------------------------------------------------------------<br>";
 
 echo "Hello, World with echo! ";
-echo "Hello, World with print!";
+print "Hello, World with print!";
 
 echo "<br>--------------------------------------------------------------<br>";
 
