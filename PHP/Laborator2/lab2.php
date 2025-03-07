@@ -5,14 +5,14 @@ $date = date("l");
 function getdata($date, $person)
 {
     if ($person === "John Styles") {
-        if ($date == "Mondate" || $date == "Wednesdate" || $date == "Fridate") {
+        if ($date == "Monday" || $date == "Wednesday" || $date == "Friday") {
             return "8:00 - 12:00";
         }
         return "Нерабочий день";
     }
 
     if ($person === "Jane Doe") {
-        if ($date == "Tuesdate" || $date == "Thursdate" || $date == "Saturdate") {
+        if ($date == "Tuesday" || $date == "Thursday" || $date == "Saturday") {
             return "12:00 - 16:00";
         }
         return "Нерабочий день";
