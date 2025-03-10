@@ -1,13 +1,16 @@
 <?php
 
-$dir = './image';
-
+$dir = 'image/';
 $files = scandir($dir);
 
 if ($files === false) {
-    return;
+   return;
 }
 
+
+// echo "<pre>";
+// print_r($files);
+// echo "</pre>";
 
 ?>
 
@@ -33,6 +36,7 @@ if ($files === false) {
         nav {
             background-color: rgb(171, 131, 52);
             overflow: hidden;
+            text-align: center;
         }
         nav a {
             color: white;
@@ -44,21 +48,22 @@ if ($files === false) {
             background-color:rgb(255, 221, 129);
         }
         .nachos {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
             padding: 20px;
+            justify-content: center;
         }
         .nachos img {
-            max-width: 100%;
+            width: 100%;
             height: auto;
-            margin: 10px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(255, 185, 72, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 3px solid #c8a135;
             transition: transform 0.3s ease;
         }
         .nachos img:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -75,17 +80,17 @@ if ($files === false) {
 </nav>
 
 <div class="nachos">
-    <?php
-    for ($i = 0; $i < count($files); $i++) {
+<?php 
+        for ($i = 0; $i < count($files); $i++) {
         if (($files[$i] != ".") && ($files[$i] != "..")) {
-            $path = $dir . $files[$i];
-            if (preg_match("/\.jpg$/i", $files[$i])) {
-                echo "<img src='$path' alt='Изображение'>";
+            $path = $dir . $files[$i]; ?>                  
+            <img border='1' src=<?php echo $path?>>    
+        <?php
             }
         }
-    }
-    ?>
+        ?>
 </div>
+
 
 <footer>
     <p>©Начосини 2025</p>
