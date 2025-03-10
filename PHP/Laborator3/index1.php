@@ -111,8 +111,11 @@ addTransaction(4, "2025-03-09", 150.00, "Book purchase", "Librarius");
     </table>
 
 <p><?php print_r(calculateTotalAmount($transactions))?></p>
+
 <p><?php print_r(findTransactionByDescription($transactions, 'Volkodav'))?></p>
+
 <p><?php print_r(findTransactionById($transactions, 3))?></p>
+
 <p><?php 
     usort($transactions, function($a, $b) {
         $dateA = new DateTime($a['date']);
@@ -121,12 +124,13 @@ addTransaction(4, "2025-03-09", 150.00, "Book purchase", "Librarius");
     });
     print_r($transactions);
 ?></p>
+
 <p><?php 
     usort($transactions, function($a, $b) {
         return $b['amount'] - $a['amount'];
     });
     print_r($transactions);
 ?></p>
-</body>
 
+</body>
 </html>
