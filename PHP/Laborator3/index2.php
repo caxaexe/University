@@ -1,13 +1,4 @@
 <?php
-
-$dir = __DIR__ . '/image/';
-$files = scandir($dir);
-
-if ($files === false) {
-   return;
-}
-
-
 // echo "<pre>";
 // print_r($files);
 // echo "</pre>";
@@ -80,7 +71,13 @@ if ($files === false) {
 </nav>
 
 <div class="nachos">
-<?php 
+    <?php 
+        $dir = 'image/';
+        $files = scandir($dir);
+
+        if ($files === false) {
+        return;
+        }
         for ($i = 0; $i < count($files); $i++) {
         if (($files[$i] != ".") && ($files[$i] != "..")) {
             $path = $dir . $files[$i]; ?>                  
@@ -88,7 +85,7 @@ if ($files === false) {
         <?php
             }
         }
-        ?>
+    ?>
 </div>
 
 <footer>
