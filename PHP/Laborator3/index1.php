@@ -27,12 +27,25 @@ $transactions = [
 ];
 
 
-
+/**
+ * Calculate the total amount of all transactions.
+ *
+ * @param array $transactions Array of transaction data.
+ * 
+ * @return float The total amount of all transactions.
+ */
 function calculateTotalAmount(array $transactions): float {
     return array_sum(array_column($transactions, 'amount'));
 }
 
-
+/**
+ * Find a transaction by part of its description.
+ *
+ * @param array $transactions Array of transaction data.
+ * @param string $descriptionPart Part of the description to search for.
+ * 
+ * @return array|null The transaction found or null if not found.
+ */
 function findTransactionByDescription(array $transactions, string $descriptionPart) {
     $descriptions = array_column($transactions, 'description');
     foreach ($descriptions as $index => $description) {
@@ -43,7 +56,14 @@ function findTransactionByDescription(array $transactions, string $descriptionPa
     return null;
 }
 
-
+/**
+ * Find a transaction by its ID.
+ *
+ * @param array $transactions Array of transaction data.
+ * @param int $id The ID of the transaction to find.
+ * 
+ * @return array|null The transaction found or null if not found.
+ */
 function findTransactionById(array $transactions, int $id) {
     $ids = array_filter($transactions, function ($transaction) use ($id) {
         return $transaction['id'] === $id;
@@ -52,7 +72,14 @@ function findTransactionById(array $transactions, int $id) {
     return $ids ?: null;
 }
 
-
+/**
+ * Calculate the number of days since a transaction occurred.
+ *
+ * @param string $date The date of the transaction.
+ * @param array $transactions Array of transaction data.
+ * 
+ * @return int The number of days since the transaction.
+ */
 function daysSinceTransaction(string $date, array $transactions): int {
     $transactionDate = new DateTime($date);
     $currentDate = new DateTime();
@@ -60,7 +87,17 @@ function daysSinceTransaction(string $date, array $transactions): int {
     return $interval->days; 
 }
 
-
+/**
+ * Add a new transaction to the transactions array.
+ *
+ * @param int $id The ID of the new transaction.
+ * @param string $date The date of the new transaction.
+ * @param float $amount The amount of the new transaction.
+ * @param string $description A description of the new transaction.
+ * @param string $merchant The merchant associated with the new transaction.
+ * 
+ * @return void
+ */
 function addTransaction(int $id, string $date, float $amount, string $description, string $merchant): void {
     global $transactions;
     $transactions[] = [
