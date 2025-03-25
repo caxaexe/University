@@ -78,11 +78,68 @@ max_execution_time = 120
 - для функционирования mariadb создайте папку /var/run/mysqld и установите права на неё
 - открываю порт 80
 - добавляю команду запуска supervisord
-  ![Снимок экрана 2025-03-23 142022](https://github.com/user-attachments/assets/ba3f9007-e014-410f-b55d-43063297a9d5)
+![Снимок экрана 2025-03-25 171402](https://github.com/user-attachments/assets/1ecd55f6-a4b3-4fe4-b5e0-0cc2e3d04206)
+
 
 Далее снова создаю образ контейнера с именем `apache2-php-mariadb` и запускаю контейнер `apache2-php-mariadb` из образа `apache2-php-mariadb`.
-![Снимок экрана 2025-03-23 145306](https://github.com/user-attachments/assets/ac1870b4-4200-47e3-9790-9bef670fe1cc)
-![Снимок экрана 2025-03-23 145901](https://github.com/user-attachments/assets/b138bc32-2bab-4686-b0a2-883fd8c1e190)
+![Снимок экрана 2025-03-25 171241](https://github.com/user-attachments/assets/d0038d4f-46cb-45ee-89a3-c4e735a9940a)
+![Снимок экрана 2025-03-23 145901](https://github.com/user-attachments/assets/b138bc32-2bab-4686-b0a2-883fd8c1e190)  
+
+Проверяю наличие сайта `WordPress` в папке /var/www/html/, при помощи команды `docker exec -it apache2-php-mariadb ls /var/www/html/`. Можно заметить, что присутствуют файлы `index.php` и другие файлы, относящиеся к WordPress.
+![Снимок экрана 2025-03-25 171318](https://github.com/user-attachments/assets/71e0e017-141f-44de-93ec-f93f763aeb60)
+
+Также проверяю изменения конфигурационного файла apache2 командой `docker exec -it apache2-php-mariadb cat /etc/apache2/sites-available/000-default.conf`.
+![Снимок экрана 2025-03-25 171523](https://github.com/user-attachments/assets/86de6780-db44-49ae-b3a1-12ad59a807f4)  
+
+---
+
+Создаю базу данных `wordpress` и пользователя `wordpress` с паролем `wordpress` в контейнере `apache2-php-mariadb`. Для этого, в контейнере `apache2-php-mariadb`, я выполняю следующую команду `docker exec -it apache2-php-mariadb mysql -u root` для запуска mysql, после чего ввожу:
+```mysql
+CREATE DATABASE wordpress;
+CREATE USER 'wordpress'@'localhost' IDENTIFIED BY 'wordpress';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+![Снимок экрана 2025-03-25 171609](https://github.com/user-attachments/assets/6b0556ec-426a-4704-83c2-ef3b965e44b3)  
+
+---
+
+Следующим шагом я перехожу по адресу `http://localhost/` и открываю сайт `Wordpress` в браузере.
+![Снимок экрана 2025-03-25 172154](https://github.com/user-attachments/assets/cbb0c48f-caca-4af3-a1fa-518cf9679b9f)  
+Далее указываю там параметры подключения к базе данных:
+![Снимок экрана 2025-03-25 172449](https://github.com/user-attachments/assets/3cc2f776-f912-4a81-af0d-1295f8c34139)  
+Открывается окно с содержимым файла wp-config.php, которое я скопирую себе в соответствующую директорию:
+![Снимок экрана 2025-03-25 172521](https://github.com/user-attachments/assets/87410edb-c94b-4183-935a-b5b89b00efb8)  
+
+---
+
+Здесь я обновляю файл `Dockerfile`, добавляя в него файл конфигурации `Wordpress`.
+![image](https://github.com/user-attachments/assets/fba61422-15c2-46fb-a673-30a5b04452ba)  
+
+---
+
+Далее я пересобираю образ контейнера с именем `apache2-php-mariadb` и запускаю заново контейнер `apache2-php-mariadb` из образа `apache2-php-mariadb`.
+![image](https://github.com/user-attachments/assets/57b1d130-cdf5-4f1b-9dc9-0f2dffa1169b)
+![image](https://github.com/user-attachments/assets/7eca40b5-d777-4a12-8485-bccee973eac6)  
+ 
+И в финале работы я проверяю работоспособность сайта `WordPress` (ᵔ◡ᵔ) 
+![image](https://github.com/user-attachments/assets/bfe8c676-04c8-4eb7-9d1b-c699284df823)  
+Все не работает прекрасно и великолепно, чему можно только порадоваться. Посовещавшись с коллегами, было принято решение кое что поменять при создании базы данных в mysql. Заменяю "localhost" на знак процента %, чтобы разрешить подключение с любого IP-адреса. Сейчас все покажу:
+```mysql
+CREATE DATABASE wordpress;
+CREATE USER 'wordpress'@'%' IDENTIFIED BY 'wordpress';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%';
+FLUSH PRIVILEGES;
+EXIT;
+```
+![image](https://github.com/user-attachments/assets/f9f063cd-db0d-48a2-b04d-e879e85d3ab1)  
+
+При очередном запуске `http://localhost/` появляется приветственное окно с полями для ввода своих данных. Ввожу все красивенько *(только без взлома)*:  
+![image](https://github.com/user-attachments/assets/8d920a30-9b84-445d-84f7-e2fa5b8f14f0)  
+![image](https://github.com/user-attachments/assets/4bd0fd2e-eefe-4040-94f0-85cac75217b8)
+![image](https://github.com/user-attachments/assets/1f96ce2a-9a92-4df0-a973-814a2c47cd46)  
+![image](https://github.com/user-attachments/assets/c66802de-4c3f-4d52-ab3a-29b20c5cfeb6)
 
 
 ## Вывод
