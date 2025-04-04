@@ -1,7 +1,10 @@
 <?php
-// echo "<pre>";
-// print_r($files);
-// echo "</pre>";
+$dir = 'image/';
+$files = scandir($dir);
+
+if ($files === false) {
+   return;
+}
 
 ?>
 
