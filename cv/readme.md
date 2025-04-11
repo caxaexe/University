@@ -1,1 +1,1 @@
-# Containerization and virtualization, или в простонародье контейниризация и виртуализация
+# Containerization and virtualization, или в простонародье контейнеризация и виртуализация
