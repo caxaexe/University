@@ -142,4 +142,4 @@ services:
       env_file:
         - app.env
    ```  
-3. Теперь переменная APP_VERSION будет доступна внутри контейнеров backend и frontend.
+3. Теперь переменная `APP_VERSION` будет доступна внутри контейнеров `backend` и `frontend`.
