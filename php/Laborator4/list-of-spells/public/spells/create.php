@@ -1,9 +1,25 @@
 <?php
 
+/**
+ * Основной файл обработки формы добавления заклинания.
+ *
+ * Загружает обработчик `handlerForm()` и выполняет проверку данных, отправленных методом POST.
+ * В случае успешной отправки перенаправляет пользователя на главную страницу.
+ * В случае ошибок сохраняет их в переменную $errors для отображения пользователю.
+ *
+ * @package SpellsApp
+ */
 require_once __DIR__ . '/../../src/handlers/handle_form.php';
 
 $errors = [];
 
+/**
+ * Обработка запроса формы.
+ *
+ * Проверка, был ли запрос методом POST. В этом случае вызывается handlerForm(),
+ * который возвращает либо сообщение об успехе, либо массив ошибок.
+ * При успехе происходит редирект на index.php. Ошибки сохраняются для отображения в форме.
+ */
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = handlerForm($_POST);
 
@@ -139,7 +155,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <div>
-            <label for="descriprion">Описание заклинания:</label>
+            <label for="description">Описание заклинания:</label>
             <textarea name="description" id="description"><?php echo htmlspecialchars($_POST['description'] ?? '') ?></textarea>
             <?php if(isset($errors['description'])): ?>
                 <p class="error"><?php echo $errors['description']; ?></p>
