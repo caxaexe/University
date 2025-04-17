@@ -1,13 +1,10 @@
 <?php
-//чтение данных из файла игноируя новые строки
-$spells = file('../storage/spells.txt', FILE_IGNORE_NEW_LINES);
 
-// преобразование строки json в массив объектов или ассоц массивов если true
-$spells = array_map('json_decode', $spells);
+require_once __DIR__ . '/../src/helpers.php';
 
-// получение два послдених заклинания
+$spells = loadSpell();
+
 $latestSpells = array_slice($spells, -2);
-
 ?>
 
 <!DOCTYPE html>
@@ -17,16 +14,32 @@ $latestSpells = array_slice($spells, -2);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список последних заклинаний</title>
     <style>
-        .spell-item {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .spell-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-    </style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        padding: 2rem;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .spell-item {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .spell-item h2 {
+        font-size: 1rem;
+        margin: 0.3rem 0;
+    }
+</style>
+
 </head>
 <body>
     <h1>Последние заклинания</h1>
@@ -35,9 +48,25 @@ $latestSpells = array_slice($spells, -2);
     <?php if(empty($latestSpells)): ?>
         <p>Пока нет добавленных заклинаний.</p>
     <?php else: ?>
-        <?php foreach ($latestSpells as $spells): ?>
-            <?php if($spells): ?>
-                <div class="spell-item">
-                    <h2 class="spell-name><?php ecgo</h2>
+        <ul>
+            <?php foreach ($latestSpells as $spells): ?>
+                <li>
+                    <div class="spell-item">
+                        <h2><?php echo htmlspecialchars($spells['title']) ?></h2>
+                        <p>Категория: <?php echo htmlspecialchars($spells['category']) ?> </p>
+                        <p>Описание: <?php echo htmlspecialchars($spells['description']) ?> </p>
+                        <p>Тэги: <?php echo implode(', ', array_map('htmlspecialchars', $spells['tags'])) ?> </p>
+                        <p>Шаги выполнения заклинания:</p>
+                            <?php foreach($spells['steps'] as $step): ?>
+                                <p><?php echo htmlspecialchars($step) ?> </p>
+                            <?php endforeach; ?>
+                    </div>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    <?php endif ?>
 
-                </div>
+    <a href="/public/spells/index.php">Глянуть все заклинания</a>
+    <a href="/public/spells/create.php">Добавить новое заклинание</a>
+</body>
+</html>

@@ -1,5 +1,19 @@
 <?php
 
+require_once __DIR__ . '/../../src/handlers/handle_form.php';
+
+$errors = [];
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = handlerForm($_POST);
+
+    if(isset($result['success']) && $result['success'] === true) {
+        header('Location: /public/index.php');
+        exit;
+    } else {
+        $errors = $result['errors'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,108 +23,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавление заклинания</title>
     <style>
-        .step {
-         margin-bottom: 5px;
-        }
-        .error {
-            color: red;
-        }
-    </style>
-    <script>
-        function addStep() {
-            const stepContainer = document.getElementById("steps-container"); // ссылка на <div id="steps-container">
-            const stepCount = stepContainer.children.length + 1; // определяем номер нового шага
-            
-            const stepDiv = document.createElement("div"); 
-            stepDiv.classList.add("step"); // создаётся новый <div> с классом "step"
-            stepDiv.innerHTML = `<input type="text" name="steps[]" placeholder="Шаг ${stepCount}" required> ` + // создаёт текстовое поле для ввода шага
-                                `<button type="button" onclick="removeStep(this)">Удалить</button>`; // кнопка, которая вызывает removeStep(this)
-            stepContainer.appendChild(stepDiv); // новый шаг добавляется в <div id="steps-container">
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 2rem;
+    }
 
-        function removeStep(button) {
-            button.parentElement.remove(); // удаляет <div class="step">
-        }
+    h1 {
+        text-align: center;
+        color: #222;
+        margin-bottom: 1.5rem;
+    }
 
-        function getError(fieldName) {
-            const errors = <?php echo json_encode($_SESSION['errors'] ?? []); ?>;
-            return errors[fieldName] || '';
-        }
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
 
-        function getOldValue(fieldName, index = null) {
-            const oldData = <?php echo json_encode($_SESSION['old_data'] ?? []); ?>;
-            if(oldData[fieldName]) {
-                if(Array.isArray(oldData[fieldName]) && index !== null) {
-                    return oldData[fieldName][index];
-                }
-                return oldData[fieldName];
-            }
-            return '';
-        }
-    </script>
+    label {
+        display: block;
+        margin-bottom: 1rem;
+        color: #333;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .error {
+        color: #c00;
+        font-size: 0.9rem;
+        margin-top: -0.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .step input[type="text"] {
+        margin-top: 0.3rem;
+    }
+
+    #addStep {
+        margin-top: 0.5rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    #addStep:hover {
+        background-color: #0056b3;
+    }
+
+    button[type="submit"] {
+        margin-top: 1rem;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #218838;
+    }
+</style>
 </head>
 <body>
+
     <h1>Добавление нового заклинания</h1>
-    <form action="../src/handlers/handle_form.php" method="post">
-        <label>Название заклинания: <input type="text" name="spell_name" required></label><br>
-        <?php if(isset($_SESSION['errors']['spell_name'])): ?>
-            <div class="error"><?php echo $_SESSION['errors']['spell_name']; ?></div>
-        <?php endif; ?>
 
-        <label>Категория заклинания:
-            <select name="category" required>
-                <option value="непростительное" <?php if(getOldValue('category') === 'непростительное') echo 'selected'; ?>>Непростительное</option>
-                <option value="бытовое" <?php if(getOldValue('category') === 'бытовое') echo 'selected'; ?>>Бытовое</option>
-                <option value="невербальное" <?php if(getOldValue('category') === 'невербальное') echo 'selected'; ?>>Невербальное</option>
-                <option value="продвинутое" <?php if(getOldValue('category') === 'продвинутое') echo 'selected'; ?>>Продвинутое</option>
-            </select>
-        </label><br>
-        <?php if(isset($_SESSION['errors']['category'])): ?>
-            <div class="error"><?php echo $_SESSION['errors']['category']; ?></div>
-        <?php endif; ?>
-
-        <label>Описание заклинания:<br>
-            <textarea name="description" rows="4" required><?php echo getOldValue('description'); ?></textarea>
-        </label><br>
-        <?php if(isset($_SESSION['errors']['description'])): ?>
-            <div class="error"><?php echo $_SESSION['errors']['description']; ?></div>
-        <?php endif; ?>
-
-        <label>Тэги:
-            <select name="tags[]" multiple>
-                <option value="оборонительные" <?php if(is_array(getOldValue('tags')) && in_array('оборонительные', getOldValue('tags'))) echo 'selected';  ?>>Оборонительные</option>
-                <option value="атакующие" <?php if(is_array(getOldValue('tags')) && in_array('атакующие', getOldValue('tags'))) echo 'selected';  ?>>Атакующие</option>
-                <option value="трансфигурационные" <?php if(is_array(getOldValue('tags')) && in_array('трансфигурационные', getOldValue('tags'))) echo 'selected';  ?>>Трансфигурационные</option>
-                <option value="целебные" <?php if(is_array(getOldValue('tags')) && in_array('целебные', getOldValue('tags'))) echo 'selected';  ?>>Целебные</option>
-                <option value="призывные" <?php if(is_array(getOldValue('tags')) && in_array('призывные', getOldValue('tags'))) echo 'selected';  ?>>Призывные</option>
-                <option value="разрушительные" <?php if(is_array(getOldValue('tags')) && in_array('разрушительные', getOldValue('tags'))) echo 'selected';  ?>>Разрушительные</option>
-                <option value="контроль сознания" <?php if(is_array(getOldValue('tags')) && in_array('контроль сознания', getOldValue('tags'))) echo 'selected';  ?>>Контроль сознания</option>
-            </select>
-        </label><br>
-
-        <label>Шаги выполнения заклинания:</label>
-        <div id="steps-container">
-            <?php if(isset($_SESSION['old_data']['steps']) && is_array($_SESSION['old_data']['steps'])): ?>
-                <?php foreach($_SESSION['old_data']['steps'] as $index => $step): ?>
-                    <div class="step">
-                        <input type="text" name="steps[]" placeholder="Шаг <?php echo $index +1; ?>" value="<?php echo sanitizeInput($step); ?>" required
-                        <button type="button" onclick="removeStep(this)">Удалить</button>>
-                    </div>
-                    <?php endforeach; ?>
+    <form action="" method="POST">
+        <div>
+            <label for="title">Название заклинания:</label>
+            <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($_POST['title'] ?? '') ?>">
+            <?php if(isset($errors['title'])): ?>
+                <p class="error"><?php echo $errors['title']?><p>
             <?php endif; ?>
         </div>
-        <button type="button" onclick="addStep()">Добавить шаг</button><br>
-        <?php if(isset($_SESSION['errors']['steps'])): ?>
-            <div class="error"><?php echo $_SESSION['errors']['steps']; ?></div>
-        <?php endif; ?>
-        
-        <button type="submit">Отправить</button>
+
+
+        <div>
+            <label for="category">Категория заклинания:</label>
+            <select name="category" id="category">
+                <option value="непростительное" <?php echo isset($_POST['category']) && $_POST['category'] === 'непростительное' ? 'selected' : '' ?>>Непростительное</option>
+                <option value="бытовое" <?php echo isset($_POST['category']) && $_POST['category'] === 'бытовое' ? 'selected' : '' ?>>Бытовое</option>
+                <option value="невербальное" <?php echo isset($_POST['category']) && $_POST['category'] === 'невербальное' ? 'selected' : '' ?>>Невербальное</option>
+                <option value="продвинутое" <?php echo isset($_POST['category']) && $_POST['category'] === 'продвинутое' ? 'selected' : '' ?>>Продвинутое</option>
+            </select>
+            <?php if(isset($errors['category'])): ?>
+                <p class="error"><?php echo $errors['category']; ?></p>
+            <?php endif; ?>
+        </div>
+
+
+        <div>
+            <label for="descriprion">Описание заклинания:</label>
+            <textarea name="description" id="description"><?php echo htmlspecialchars($_POST['description'] ?? '') ?></textarea>
+            <?php if(isset($errors['description'])): ?>
+                <p class="error"><?php echo $errors['description']; ?></p>
+            <?php endif; ?>
+        </div>
+
+
+        <div>
+            <label for="tags">Тэги:</label>
+            <select name="tags[]" id="tags" multiple>
+                <option value="оборонительные">Оборонительные</option>
+                <option value="атакующие">Атакующие</option>
+                <option value="трансфигурационные">Трансфигурационные</option>
+                <option value="целебные">Целебные</option>
+                <option value="призывные">Призывные</option>
+                <option value="разрушительные">Разрушительные</option>
+                <option value="контроль сознания">Контроль сознания</option>
+            </select>
+            <?php if(isset($errors['tags'])): ?>
+                <p class="error"><?php echo $errors['tags'] ?> </p>
+            <?php endif; ?>
+        </div>
+    
+
+        <div>
+            <label for="steps">Шаги выполнения заклинания:</label>
+            <div id="steps-container">
+                <div class="step">
+                    <input type="text" name="steps[]" value="">
+                </div>          
+            </div>
+            <button type="button" id="addStep">Добавить шаг</button><br>
+        </div>
+        <div>
+            <button type="submit">Отправить</button>
+        </div>
     </form>
 
-    <?php
-    // удаление сессионных переменных с ошибками и старыми данными после отображения
-    unset($_SESSION['errors']);
-    unset($_SESSION['old_data']);
-    ?>
+    <script>
+        document.getElementById('addStep').addEventListener('click', function() {
+            let stepsDiv = document.getElementById('steps-container');
+            let newStep = document.createElement('div');
+            newStep.innerHTML = '<input type="text" name="steps[]" value="">';
+            stepsDiv.appendChild(newStep);
+        });
+    </script>
 </body>
 </html>
