@@ -1,11 +1,40 @@
 <?php
 
+/**
+ * Страница отображения всех заклинаний с постраничной навигацией.
+ *
+ * Получает текущую страницу из параметра GET, затем использует функцию `getPaginatedSpells()`
+ * для получения списка заклинаний и информации о пагинации.
+ * Отображает заклинания в виде карточек, а также блок пагинации, если заклинаний больше одной страницы.
+ *
+ * @package SpellsApp
+ */
 require_once __DIR__ . '/../../src/helpers.php';
 
+/** @var int $page Текущий номер страницы (по умолчанию 1) */
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+/**
+ * Получение пагинированного списка заклинаний.
+ *
+ * Возвращаемый массив содержит:
+ *  - `spells` (array): Массив заклинаний на текущей странице.
+ *  - `total_pages` (int): Общее количество страниц.
+ *  - `current_page` (int): Текущая страница.
+ *
+ * @see getPaginatedSpells()
+ *
+ * @var array $pagination Результат пагинации
+ */
 $pagination = getPaginatedSpells($page);
+
+/** @var array $spells Список заклинаний на текущей странице */
 $spells = $pagination['spells'];
+
+/** @var int $totalSpells Общее количество страниц */
 $totalSpells = $pagination['total_pages'];
+
+/** @var int $currentPage Текущий номер страницы */
 $currentPage = $pagination['current_page'];
 
 ?>
