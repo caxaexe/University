@@ -1,18 +1,18 @@
 <?php
 
-require_once '../src/helpers.php';
+require_once __DIR__ . '/../../src/helpers.php';
 
-function handlerForm($date) {
-    $spellName = $data['spellName'] ?? '';
+function handlerForm($data) {
+    $title = $data['title'] ?? '';
     $category = $data['category'] ?? '';
     $description = $data['description'] ?? '';
     $tags = $data['tags'] ?? '';
     $steps = $data['steps'] ?? '';
 
-    $errors = validateSpell($spellName, $category, $description, $tags, $steps);
+    $errors = validateSpell($title, $category, $description, $tags, $steps);
 
     if(empty($errors)) {
-        saveSpell($spellName, $category, $description, $tags, $steps);
+        saveSpell($title, $category, $description, $tags, $steps);
         return ['success' => true];
     }
 
