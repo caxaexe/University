@@ -1,0 +1,8 @@
+FROM php:8.4-cli
+
+WORKDIR /var/www/html
+
+COPY . .
+
+RUN apt-get update && apt-get install -y sqlite3 && \
+    docker-php-ext-install pdo pdo_sqlite
