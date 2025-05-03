@@ -473,13 +473,94 @@ function getPdoConnection() {
 ### templates/spell/edit.php
 Форма редактирования заклинания
 ```php
+<form action="/list-of-spells/public/?action=edit&id=<?= $spell['id'] ?>" method="post">
+    <label for="title">Название:</label>
+    <input type="text" name="title" id="title" value="<?= htmlspecialchars($spell['title'] ?? '') ?>">
+    <?php if (!empty($errors['title'])): ?>
+        <p style="color:red"><?= htmlspecialchars($errors['title']) ?></p>
+    <?php endif; ?>
+    <br>
 
+    <label for="category">Категория:</label>
+    <select name="category" id="category">
+        <option value="">Выберите категорию</option>
+        <?php foreach ($categories as $cat): ?>
+            <option value="<?= $cat['id'] ?>" <?= ($spell['category'] ?? '') == $cat['id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($cat['name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php if (!empty($errors['category'])): ?>
+        <p style="color:red"><?= htmlspecialchars($errors['category']) ?></p>
+    <?php endif; ?>
+    <br>
+
+    <label for="description">Описание:</label>
+    <textarea name="description" id="description"><?= htmlspecialchars($spell['description'] ?? '') ?></textarea>
+    <?php if (!empty($errors['description'])): ?>
+        <p style="color:red"><?= htmlspecialchars($errors['description']) ?></p>
+    <?php endif; ?>
+    <br>
+
+    <div>
+        <label for="tags">Теги:</label>
+        <select name="tags[]" id="tags" multiple>
+            $tagStmt = $pdo->query("SELECT id, name FROM tags");
+            $allTags = $tagStmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+
+            <?php foreach ($allTags as $tag): ?>
+                <option value="<?= $tag['id'] ?>"
+                    <?= in_array($tag['id'], $selectedTags) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($tag['name']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <?php if (isset($errors['tags'])): ?>
+            <p class="error"><?= htmlspecialchars($errors['tags']) ?></p>
+        <?php endif; ?>
+    </div>
+    <br>
+
+    <label>Шаги выполнения:</label><br>
+    <div id="steps">
+        <?php
+        $stepData = $spell['steps'] ?? [''];
+        foreach ($stepData as $stepText):
+        ?>
+            <textarea name="steps[]" placeholder="Введите шаг выполнения заклинания"><?= htmlspecialchars($stepText) ?></textarea><br>
+        <?php endforeach; ?>
+    </div>
+    <?php if (!empty($errors['steps'])): ?>
+        <p style="color:red"><?= htmlspecialchars($errors['steps']) ?></p>
+    <?php endif; ?>
+
+    <button type="button" onclick="addStep()">Добавить шаг</button><br><br>
+
+    <button type="submit">Сохранить изменения</button>
+</form>
 ```
 
 ### templates/spell/show.php
 Отображение отдельного заклинания
 ```php
+<h2><?= htmlspecialchars($spell['title']) ?></h2>
 
+<p><strong>Категория:</strong> <br><?= htmlspecialchars($category) ?></p>
+<p><strong>Описание:</strong> <br><?= nl2br(htmlspecialchars($spell['description'])) ?></p>
+<p><strong>Теги:</strong> <br> 
+    <?= !empty($selectedTagNames) ? implode(', ', $selectedTagNames) : 'Нет тегов' ?>
+</p>
+<p><strong>Дата создания:</strong> <br><?= htmlspecialchars($spell['created_at']) ?></p>
+<p><strong>Шаги:</strong></p>
+<div style="text-align: center;">
+    <ol style="display: inline-block; text-align: left;">
+        <?php foreach ($spell['steps'] as $step): ?>
+            <li><?= htmlspecialchars($step) ?></li>
+        <?php endforeach; ?>
+    </ol>
+</div>
 ```
 
 
