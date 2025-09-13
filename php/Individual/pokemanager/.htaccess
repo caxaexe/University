@@ -1,0 +1,39 @@
+# Включение модуль перезаписи URL (mod_rewrite)
+RewriteEngine On
+
+# Обработка ЧПУ (человекопонятных URL)
+RewriteBase /PokeManager/
+
+# Убираем "index.php" из URL
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^(admin|dashboard|login|register|logout|pokemon|manage_users|manage_pokemon|create_admin)/?$ index.php?page=$1 [QSA,L]
+
+# Защита от доступа к директориям
+Options -Indexes
+
+# Защита от прямого доступа к чувствительным файлам
+<FilesMatch "\.(env|htaccess|gitignore|ini|log|sh|md)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Настройка безопасности для предотвращения XSS
+Header set X-XSS-Protection "1; mode=block"
+Header set X-Content-Type-Options "nosniff"
+
+# Защита от кликджекинга
+Header set X-Frame-Options "DENY"
+
+# Защита от CSRF
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+
+# Настройки кеширования
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|gif|js|css|pdf|html|ico)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
+
+# Перенаправление на HTTPS, если используется SSL
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
