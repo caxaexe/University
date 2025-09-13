@@ -1,0 +1,144 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f0f8ff;
+    color: #333;
+}
+
+header {
+    background: #ffcb05;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #2a75bb;
+}
+
+header h1 {
+    margin: 0;
+    color: #2a75bb;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #2a75bb;
+    font-weight: bold;
+}
+
+main {
+    padding: 20px;
+}
+
+.pokemon-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.pokemon-card {
+    background: white;
+    border: 2px solid #2a75bb;
+    border-radius: 10px;
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.pokemon-card:hover {
+    transform: scale(1.05);
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background: #2a75bb;
+    color: white;
+    margin-top: 30px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1em;
+    font-family: Arial, sans-serif;
+}
+
+.pokemon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.pokemon-card {
+    background-color: #f4f4f4;
+    border-radius: 12px;
+    padding: 1em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.pokemon-card:hover {
+    transform: scale(1.02);
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin: 1em 0;
+}
+
+.search-form input,
+.search-form select,
+.search-form button {
+    padding: 0.5em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+.search-form button {
+    background-color: #2a9d8f;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #21867a;
+}
+
+.auth-form {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.auth-form input,
+.auth-form button {
+    padding: 0.6em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+.auth-form button {
+    background-color: #264653;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background-color: #1e3d45;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
