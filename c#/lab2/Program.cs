@@ -1,7 +1,7 @@
 ﻿Console.WriteLine("Hello, Jerry");
 Console.WriteLine("----------------------------");
 ABC();
-Thread.Sleep(3000);
+Thread.Sleep(500);
 ABC();
 Thread.Sleep(3000);
 ABC();
