@@ -1,9 +1,21 @@
-version: '3.8'
-
 services:
-  currency_cron:
-    build: .
-    container_name: lab03_cron
+  # === СУЩЕСТВУЮЩАЯ СЛУЖБА ===
+  web:
+    image: php:8.3-apache
+    container_name: php_apache
+    ports:
+      - "8080:80"
     volumes:
-      - ./logs:/var/log
+      - ./app:/var/www/html
+    env_file:
+      - .env
     restart: unless-stopped
+
+
+  exchange_rate_cron:
+    build:
+      dockerfile: Dockerfile
+    container_name: exchange_rate_cron_service
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Chisinau

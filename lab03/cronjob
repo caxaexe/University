@@ -1,5 +1,9 @@
-# Ежедневно в 6:00 — курс MDL → EUR за предыдущий день
-0 6 * * * root python3 /app/currency_exchange_rate.py EUR >> /var/log/cron.log 2>&1
+# Ежедневно в 6:00 утра: Молдавский лей к Евро за предыдущий день.
+# 'date -d "yesterday" +\%Y-\%m-\%d' получает дату вчерашнего дня.
+# 0 6 * * * - в 0 минут, 6 часов, каждый день, каждый месяц, любой день недели
+0 6 * * * python3 /app/currency_exchange_rate.py --base EUR --target MDL --date $(date -d "yesterday" +\%Y-\%m-\%d) >> /var/log/cron.log 2>&1
 
-# Еженедельно по пятницам в 17:00 — курс MDL → USD за предыдущую неделю
-0 17 * * 5 root python3 /app/currency_exchange_rate.py USD >> /var/log/cron.log 2>&1
+# Еженедельно по пятницам в 17:00: Молдавский лей к Доллару США за предыдущую неделю (7 дней назад).
+# date -d "7 days ago" +\%Y-\%m-\%d' получает дату 7 дней назад.
+# 0 17 * * 5 - в 0 минут, 17 часов, каждый день, каждый месяц, только пятница (5)
+0 17 * * 5 python3 /app/currency_exchange_rate.py --base USD --target MDL --date $(date -d "7 days ago" +\%Y-\%m-\%d) >> /var/log/cron.log 2>&1

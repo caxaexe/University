@@ -1,23 +1,30 @@
 # Используем официальный образ Python
-FROM python:3.11-slim
+FROM python:3.9-slim
 
-# Устанавливаем cron и нужные библиотеки
-RUN apt-get update && apt-get upgrade -y && apt-get install -y cron && rm -rf /var/lib/apt/lists/*
+# Установка cron и других необходимых утилит
+# 'vim-tiny' и 'curl' не обязательны, но могут быть полезны для отладки
+RUN apt-get update && \
+    apt-get install -y cron vim-tiny curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Рабочая директория
+# Создание рабочего каталога
 WORKDIR /app
 
-# Копируем скрипты и cron-задачи
-COPY currency_exchange_rate.py /app/
-COPY cronjob /etc/cron.d/cronjob
-COPY entrypoint.sh /entrypoint.sh
+# Копирование файлов скрипта, cronjob и точки входа
+COPY currency_exchange_rate.py .
+COPY cronjob .
+COPY entrypoint.sh .
 
-# Настраиваем права
-RUN chmod 0644 /etc/cron.d/cronjob && \
-    chmod +x /entrypoint.sh
+# Установка необходимых Python-зависимостей (зависит от вашего скрипта)
+# Предполагая, что используется 'requests' или 'openpyxl'
+RUN pip install requests
 
-# Лог файл cron
-RUN touch /var/log/cron.log
+# Настройка cron: Добавление cron-задач из файла 'cronjob' в систему cron.
+# Используем 'sed' для удаления символов Windows-CR ('\r') для совместимости с crontab в Linux.
+RUN sed 's/\r//g' cronjob | crontab -
 
-# Точка входа
-ENTRYPOINT ["/entrypoint.sh"]
+# Точка входа в контейнер
+ENTRYPOINT ["/app/entrypoint.sh"]
+
+# Команда по умолчанию (будет заменена ENTRYPOINT)
+CMD ["cron", "-f"]
