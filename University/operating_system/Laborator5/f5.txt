@@ -1,0 +1,7 @@
+apple
+peach
+kiwi
+apricot
+banana
+mango
+coconut
