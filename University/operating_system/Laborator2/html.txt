@@ -1,9 +1,0 @@
-D:\Microsoft VS Code\resources\app\extensions\github-authentication\media\index.html
-D:\Microsoft VS Code\resources\app\extensions\microsoft-authentication\media\index.html
-D:\Microsoft VS Code\resources\app\out\vs\workbench\contrib\webview\browser\pre\index.html
-D:\un\HTML-CSS_Laborator1\index.html
-D:\un\HTML-CSS_Laborator2\index.html
-D:\un\HTML-CSS_Laborator3\index.html
-D:\un\HTML-CSS_Laborator4\index.html
-D:\un\HTML-CSS_Laborator5\index.html
-D:\un\HTML-CSS_Laborator6\index.html
