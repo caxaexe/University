@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  currency_cron:
+    build: .
+    container_name: lab03_cron
+    volumes:
+      - ./logs:/var/log
+    restart: unless-stopped
