@@ -15,49 +15,55 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $login = trim($_POST['login'] ?? '');
 $password = $_POST['password'] ?? '';
+ 
 
-$conn = new mysqli("localhost", "root", "", "sawm");
-if ($conn->connect_error) {
-    error_log("DB connect error: " . $conn->connect_error);
-    $error = "Ошибка сервера. Попробуйте позже.";
+
+if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $login)) {
+    $error = "Неверный формат логина.";
 } else {
-    $stmt = $conn->prepare("SELECT id, login, password FROM `users` WHERE login = ?");
-    if ($stmt === false) {
-        error_log("Prepare failed: " . $conn->error);
+    $conn = new mysqli("localhost", "root", "", "sawm");
+    if ($conn->connect_error) {
+        error_log("DB connect error: " . $conn->connect_error);
         $error = "Ошибка сервера. Попробуйте позже.";
     } else {
-        $stmt->bind_param("s", $login);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt = $conn->prepare("SELECT id, login, password FROM `users` WHERE login = ?");
+        if ($stmt === false) {
+            error_log("Prepare failed: " . $conn->error);
+            $error = "Ошибка сервера. Попробуйте позже.";
+        } else {
+            $stmt->bind_param("s", $login);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        if ($result && $result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+            if ($result && $result->num_rows > 0) {
+                $user = $result->fetch_assoc();
 
-            if ($password === $user['password']) {
-                if (mb_strtolower($user['login']) === 'admin') {
-                    $_SESSION['admin'] = $user['login'];
-                    $stmt->close();
-                    $conn->close();
-                    header("Location: ../public/admin.php");
-                    exit();
+                if ($password === $user['password']) {
+                    if (mb_strtolower($user['login']) === 'admin') {
+                        $_SESSION['admin'] = $user['login'];
+                        $stmt->close();
+                        $conn->close();
+                        header("Location: ../public/admin.php");
+                        exit();
+                    } else {
+                        $_SESSION['user'] = $user['login'];
+                        $stmt->close();
+                        $conn->close();
+                        header("Location: ../public/user.php");
+                        exit();
+                    }
                 } else {
-                    $_SESSION['user'] = $user['login'];
-                    $stmt->close();
-                    $conn->close();
-                    header("Location: ../public/user.php");
-                    exit();
+                    $error = "Неверный логин или пароль.";
                 }
             } else {
                 $error = "Неверный логин или пароль.";
             }
-        } else {
-            $error = "Неверный логин или пароль.";
+
+            $stmt->close();
         }
 
-        $stmt->close();
+        $conn->close();
     }
-
-    $conn->close();
 }
 
 ?>
