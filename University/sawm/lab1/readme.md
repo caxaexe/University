@@ -34,4 +34,33 @@ sawmlab2/
     ├── logout.php - логика выхода из аккаунта
     └── user.php - полу‑защищённая страница юзера
 ```
+  
+---
+  
+В созданной уже базе данных в таблицу `users` добавляю 7 новых записей - 6 обычных пользователей и 1 админа:  
+<img width="657" height="286" alt="Снимок экрана 2025-10-09 192948" src="https://github.com/user-attachments/assets/baf5c342-795c-4863-89a1-7a5ca65e5ba4" />  
+  
+Для проверки ввожу данные одного из обычных пользователей:  
+<img width="501" height="576" alt="image" src="https://github.com/user-attachments/assets/b06d8505-7ba9-44a8-a074-33f239efae4e" />  
+
+И попадаю в пользовательскую зону:  
+<img width="625" height="314" alt="image" src="https://github.com/user-attachments/assets/cc5282e0-7051-4d59-87cc-55f2ea8da457" />
+
+Теперь тестирую админского пользователя:  
+<img width="489" height="550" alt="image" src="https://github.com/user-attachments/assets/085d83a2-9397-4853-91dd-aeb52e14e92c" />  
+Попадаю в админ-панель:  
+<img width="620" height="306" alt="image" src="https://github.com/user-attachments/assets/c9d40299-edb6-4fa3-8cb1-93e80be0b06b" />  
+
+Успешно захожу в каждый из созданных аккаунтов.
+  
+---
+
+<img width="558" height="628" alt="Снимок экрана 2025-10-09 182435" src="https://github.com/user-attachments/assets/672adeeb-10f7-457b-b128-5e139d247cf9" />  
+<img width="621" height="339" alt="Снимок экрана 2025-10-09 184154" src="https://github.com/user-attachments/assets/dedc0b58-2f77-4ae4-adb6-ecfc85657007" />
+  
+<img width="612" height="306" alt="image" src="https://github.com/user-attachments/assets/cc6edd6a-7769-438d-b5d5-44856e6c6c1f" />  
+<img width="460" height="564" alt="image" src="https://github.com/user-attachments/assets/a4c404cc-f4b2-439d-865a-0ce0838d1dde" />
+
+
+
 
