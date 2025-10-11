@@ -31,22 +31,19 @@ sawmlab2/
 └── public/
     ├── admin.php - закрытая админ‑панель
     ├── login.php - HTML-форма входа в аккаунт
-    ├── logout.php - логика выхода из аккаунта
-    └── user.php - полу‑защищённая страница юзера
+    └── logout.php - логика выхода из аккаунта
 ```
+
+Создаю базу данных `sawm` специально для этой и последующих лабораторных, затем таблицу `users` с полями id, login, password:  
+<img width="543" height="212" alt="image" src="https://github.com/user-attachments/assets/9d64ff76-1aae-4ce8-ac78-543eaf6f1be3" />  
   
 ---
   
-В созданной уже базе данных в таблицу `users` добавляю 7 новых записей - 6 обычных пользователей и 1 админа:  
-<img width="657" height="286" alt="Снимок экрана 2025-10-09 192948" src="https://github.com/user-attachments/assets/baf5c342-795c-4863-89a1-7a5ca65e5ba4" />  
-  
-Для проверки ввожу данные одного из обычных пользователей:  
-<img width="501" height="576" alt="image" src="https://github.com/user-attachments/assets/b06d8505-7ba9-44a8-a074-33f239efae4e" />  
+В созданной уже базе данных в таблицу `users` добавляю 7 новых записей:  
+<img width="526" height="295" alt="image" src="https://github.com/user-attachments/assets/e72f9a44-6d9c-49ea-94f5-af3d21a5e5da" />
 
-И попадаю в пользовательскую зону:  
-<img width="625" height="314" alt="image" src="https://github.com/user-attachments/assets/cc5282e0-7051-4d59-87cc-55f2ea8da457" />
 
-Теперь тестирую админского пользователя:  
+Тестирую админского пользователя:  
 <img width="489" height="550" alt="image" src="https://github.com/user-attachments/assets/085d83a2-9397-4853-91dd-aeb52e14e92c" />  
 Попадаю в админ-панель:  
 <img width="620" height="306" alt="image" src="https://github.com/user-attachments/assets/c9d40299-edb6-4fa3-8cb1-93e80be0b06b" />  
@@ -99,8 +96,8 @@ Server-side скрипты выполняются на сервере. Они о
 <?php
 session_start();
 
-if (isset($_SESSION['user']) || isset($_SESSION['admin'])) {
-    header("Location: ../public/" . (isset($_SESSION['admin']) ? "admin.php" : "user.php"));
+if (isset($_SESSION['admin'])) {
+    header("Location: ../public/admin.php");
     exit();
 }
 
@@ -113,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $login = trim($_POST['login'] ?? '');
 $password = $_POST['password'] ?? '';
- 
 
 
 if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $login)) {
@@ -136,20 +132,12 @@ if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $login)) {
             if ($result && $result->num_rows > 0) {
                 $user = $result->fetch_assoc();
 
-                if ($password === $user['password']) {
-                    if (mb_strtolower($user['login']) === 'admin') {
-                        $_SESSION['admin'] = $user['login'];
-                        $stmt->close();
-                        $conn->close();
-                        header("Location: ../public/admin.php");
-                        exit();
-                    } else {
-                        $_SESSION['user'] = $user['login'];
-                        $stmt->close();
-                        $conn->close();
-                        header("Location: ../public/user.php");
-                        exit();
-                    }
+                if ($password === $user['password'] && mb_strtolower($user['login']) === 'admin') {
+                    $_SESSION['admin'] = $user['login'];
+                    $stmt->close();
+                    $conn->close();
+                    header("Location: ../public/admin.php");
+                    exit();
                 } else {
                     $error = "Неверный логин или пароль.";
                 }
@@ -163,7 +151,6 @@ if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $login)) {
         $conn->close();
     }
 }
-
 ?>
 ```
 Скрипт запускает сессию, проверяет, что запрос — POST и формат логина корректен, затем ищет пользователя в базе через подготовленный запрос; при совпадении пароля записывает в сессию либо admin, либо user и перенаправляет на соответствующую страницу.  
