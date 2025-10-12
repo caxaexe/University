@@ -19,6 +19,7 @@ data_time_message;
 ## Документация к проекту
 
 Я использую ту же базу данных, что и в прошлой лабораторной работе, и создаю новую таблицу `guest` с полями айди, имя, емейл и сообщение:  
+  
 <img width="660" height="264" alt="image" src="https://github.com/user-attachments/assets/511f1769-0b9e-43a4-a7eb-0190b453a906" />  
 
 
@@ -35,12 +36,18 @@ data_time_message;
 А при отправке формы с пустым поле мы получаем сообщение о том, что это конкретное поле нужно заполнить:  
 <img width="1901" height="707" alt="image" src="https://github.com/user-attachments/assets/06a20c20-78ae-47c6-b795-95fedace2a3b" />  
 
-`<script>alert(123);</script>`:
+---
+
+На этом этапе проводим самые распространенные XSS атаки на данной веб-странице, используя JS скрипты в поле для ввода сообщений:  
+  
+`<script>alert(123);</script>`:  
 <img width="1889" height="668" alt="image" src="https://github.com/user-attachments/assets/aada1fb8-9f4e-464d-b41d-51beeffa9b4b" />  
+Появляется всплывающее окно в браузере с текстом `123`:
 <img width="1912" height="165" alt="image" src="https://github.com/user-attachments/assets/740a3b21-3c4c-4aa9-b17a-ea21d6d92ccb" />
   
 `<script>window.location='https://example.com'</script>`:
 <img width="1888" height="676" alt="image" src="https://github.com/user-attachments/assets/b547f9bf-28d6-4cdd-a373-42c6e784c96f" />  
+Попадаем на сторонний сайт через скрипт:  
 <img width="1899" height="347" alt="image" src="https://github.com/user-attachments/assets/98aea5e7-6464-40e9-8ed9-24b22b6fe6ad" />   
   
 `<img src=x onerror="document.body.innerHTML='<h1>Пикачу</h1><img src=\'https://static.wikia.nocookie.net/pokemon/images/4/4a/0025Pikachu.png/revision/latest/scale-to-width-down/1000?cb=20250716011027\'/>'">`
@@ -51,16 +58,34 @@ data_time_message;
 
   
 Изменяем два главных файла `guest.php` и `guest_save.php`, добавляя скрипты, обеспечивающие безопасность:
-```php
-script
+```html
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';">
 ```
-он делает  
-  
-```php
-script
-```
-он делает  
+Этот заголовок сообщает браузеру: разрешать загружать ресурсы только с нашего домена ('self'), запрещая скрипты, стили, изображения, если они идут с внешних сайтов.  
 
+```php
+<strong class="guest-username"><?= htmlspecialchars($r['user'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></strong>
+
+<div class="guest-message">
+  <?= nl2br(htmlspecialchars($r['text_message'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) ?>
+</div>
+
+<a href="mailto:<?= htmlspecialchars($r['e_mail'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
+```
+htmlspecialchars() преобразует специальные символы в HTML‑сущности, а ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' гарантирует, что и одинарные, и двойные кавычки безопасно экранируются, а некорректные UTF-символы заменяются на безопасные сущности.
+
+```php
+$stmt = $pdo->prepare("INSERT INTO guest (user, text_message, e_mail) VALUES (:user, :msg, :email)");
+$stmt->execute([
+    ':user' => $user,
+    ':msg' => $msg,
+    ':email' => $email
+]);
+```
+Prepared statements — защищают от SQL‑инъекций  
+
+---
+  
 Теперь заново проводим XSS атаки, чтобы проверить работоспособность этих скриптов. Использую точно такие же JS скрипты, что и ранее, вводя их в поле ввода сообщения:  
 <img width="1890" height="684" alt="image" src="https://github.com/user-attachments/assets/f4cd3aa6-5ab4-4635-8b19-296bc8aa8c58" />  
 <img width="1889" height="668" alt="image" src="https://github.com/user-attachments/assets/9acc242f-c009-4252-866c-ae20dc5098cd" />  
