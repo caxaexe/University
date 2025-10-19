@@ -40,10 +40,19 @@
 !!!User Data — это скрипт, который выполняется автоматически при первом запуске EC2-инстанса. Он используется для автоматической настройки и инициализации сервера без ручного входа по SSH. В данном случае скрипт: Обновляет систему (dnf -y update); Устанавливает утилиту htop для мониторинга ресурсов; Устанавливает и запускает nginx — популярный веб-сервер.  
   
 !!!Nginx — это лёгкий и быстрый веб-сервер, используемый для: обслуживания статических веб-страниц; обратного проксирования и балансировки нагрузки; запуска веб-приложений. В данной лабораторной работе он используется для развёртывания простого веб-сервера, который будет доступен по публичному IP-адресу.  
+<img width="1251" height="239" alt="image" src="https://github.com/user-attachments/assets/d9893624-ebc9-4284-981a-dfcc206e7808" />
+<img width="1246" height="544" alt="image" src="https://github.com/user-attachments/assets/7007c254-d3b7-41cf-87b3-e072ab41ba89" />
+<img width="1230" height="245" alt="image" src="https://github.com/user-attachments/assets/1e9d20a4-8974-4b53-bd0f-c9ba11385285" />
+<img width="1237" height="216" alt="image" src="https://github.com/user-attachments/assets/d59157e9-4a38-45b4-80ac-c3850e71e035" />
+<img width="1230" height="643" alt="image" src="https://github.com/user-attachments/assets/afbed0b6-5df1-4856-8edd-a19118c12ca4" />
+<img width="1229" height="681" alt="image" src="https://github.com/user-attachments/assets/bcb58f71-1119-4932-b228-dc92938fba77" />
+<img width="1235" height="355" alt="image" src="https://github.com/user-attachments/assets/43185de9-3bf5-462f-a3c7-cd6eccfdc528" />
+<img width="1247" height="550" alt="image" src="https://github.com/user-attachments/assets/18fdd4f0-736e-4684-9e0e-527e68df84a9" />
+<img width="1836" height="686" alt="image" src="https://github.com/user-attachments/assets/65c9aea3-2e6b-4f85-99e8-a0258e5cd82e" />
 
-<img width="1854" height="229" alt="image" src="https://github.com/user-attachments/assets/697d3c6e-b569-4574-a4d4-3c7e4b7c8aba" />  
+ 
   
-Проверяю, что веб-сервер работает, открыв в браузере URL: http://51.21.169.223:  
+Проверяю, что веб-сервер работает, открыв в браузере URL: https://63.179.87.90:  
   
 <img width="1915" height="410" alt="image" src="https://github.com/user-attachments/assets/8ea7e44a-dab5-4b8e-bd8f-9bfa052b14bf" />  
 
