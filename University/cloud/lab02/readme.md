@@ -53,8 +53,8 @@
  
   
 Проверяю, что веб-сервер работает, открыв в браузере URL: https://63.179.87.90:  
-  
-<img width="1915" height="410" alt="image" src="https://github.com/user-attachments/assets/8ea7e44a-dab5-4b8e-bd8f-9bfa052b14bf" />  
+<img width="1913" height="288" alt="image" src="https://github.com/user-attachments/assets/0b1c260b-fd07-4d85-9691-af8041672392" />
+
 
 ---
 
@@ -73,6 +73,46 @@
 Проверяем логи, в качестве примера ищем строки с установкой `nginx`:  
   
 <img width="1833" height="630" alt="image" src="https://github.com/user-attachments/assets/09b0f956-cc70-4f30-a25b-44b24f963953" />  
+
+
+---
+
+### Задание 5. Подключение к EC2 инстансу по SSH
+<img width="534" height="646" alt="image" src="https://github.com/user-attachments/assets/7aa8b122-18fc-44f1-b05f-f4afaea4bf9c" />
+
+<img width="1096" height="308" alt="image" src="https://github.com/user-attachments/assets/048b5f8d-56fa-49dd-82de-5588269f9c50" />
+ssh -i caxa-key.pem ec2-user@63.179.87.90
+<img width="1093" height="639" alt="image" src="https://github.com/user-attachments/assets/acc2b409-3f0d-4385-b841-5167a29b160a" />
+
+> Почему в AWS нельзя использовать пароль для входа по SSH?
+В AWS нельзя использовать пароль для входа по SSH, потому что это небезопасно — пароли легко подобрать. Вместо них используют ключи, которые гораздо труднее взломать.
+
+---
+
+### Задание 6c. Запуск PHP-приложения в Docker  
+
+<img width="1100" height="145" alt="image" src="https://github.com/user-attachments/assets/499a4707-1d98-419b-9a7e-0e9f225b6af4" />
+
+scp -i "D:\University\Local\AWS\caxa-key.pem" -r "D:\University\Local\sawm\sawmlab3" ec2-user@63.179.87.90:/home/ec2-user/php-docker-app/app
+<img width="1560" height="271" alt="image" src="https://github.com/user-attachments/assets/7fe9396d-e50c-46c7-b727-358fc0c1619f" />
+
+<img width="1890" height="850" alt="image" src="https://github.com/user-attachments/assets/c1af70ee-88e4-465e-b3f9-5a1a75041c79" />
+<img width="1900" height="326" alt="image" src="https://github.com/user-attachments/assets/0af089e5-8539-46d3-986a-875880253ee4" />
+<img width="1901" height="152" alt="image" src="https://github.com/user-attachments/assets/4fe6e10c-c00f-4d50-8c3c-d3a40e72890c" />
+<img width="1900" height="144" alt="image" src="https://github.com/user-attachments/assets/8fb4d548-19c1-4c3b-b35e-114e5ee55479" />
+
+Все великолепно не работает до сих пор ЮХУУУУУ:
+<img width="1919" height="774" alt="image" src="https://github.com/user-attachments/assets/90a09548-13a3-426d-a9c7-bc7bb7cbba32" />
+<img width="1919" height="793" alt="image" src="https://github.com/user-attachments/assets/ef6b9f9f-011a-4f73-b5c6-42435226d828" />
+
+
+
+
+
+
+
+
+
 
 
 
