@@ -118,7 +118,9 @@ db-server:
 <img width="1254" height="236" alt="image" src="https://github.com/user-attachments/assets/89fdf338-2d25-41a9-98f2-728d66741b92" />
 <img width="1227" height="682" alt="image" src="https://github.com/user-attachments/assets/18480a48-309a-499f-90a2-e9726feb34d6" />
 <img width="1229" height="477" alt="image" src="https://github.com/user-attachments/assets/90b4a225-23ec-432d-84c7-e9246ba75f22" />
-
+  
+<img width="1226" height="463" alt="image" src="https://github.com/user-attachments/assets/3d2259c6-8d0c-4c18-8092-fd76cedb6432" />
+  
 bastion-host:
 <img width="1229" height="162" alt="image" src="https://github.com/user-attachments/assets/8870a27d-b151-4e54-9668-c4b2d6a6b631" />
 <img width="1223" height="683" alt="image" src="https://github.com/user-attachments/assets/5c496ada-4776-4045-8ee3-4d30cf4f7f48" />
@@ -144,6 +146,10 @@ bastion-host:
 ```mysql -h 10.15.2.143 -u root -p```
 
 <img width="1418" height="66" alt="image" src="https://github.com/user-attachments/assets/0b649a01-57f5-4ac4-8a5f-4ee59ea68f68" />
+<img width="1842" height="440" alt="image" src="https://github.com/user-attachments/assets/d7cbedb2-4860-4778-afc3-617a927cbb06" />
+<img width="1086" height="401" alt="image" src="https://github.com/user-attachments/assets/13bec0b4-f9fc-4e1d-a8d8-f729e4922fc1" />
+<img width="1102" height="447" alt="image" src="https://github.com/user-attachments/assets/803b179e-079d-4593-b564-385641a744ef" />
+
 
   
 ---
