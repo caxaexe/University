@@ -6,24 +6,39 @@
 ## Ход работы
 
 ### Шаг 1. Подготовка среды
-
+  
+Вхожу в AWS Management Console. Убеждаюсь, что регион установлен на Frankfurt (eu-central-1). В строке поиска ввожу VPC и открываю консоль. Взяла салфеточки, чтобы слезы вытирать, и погнали.
   
 ---
   
 ### Шаг 2. Создание VPC
-<img width="1891" height="764" alt="image" src="https://github.com/user-attachments/assets/ba01cac8-bb4d-449b-ba1b-27990e3645a3" />  
   
- > **Что обозначает маска /16? И почему нельзя использовать, например, /8?** Маска /16 означает, что первые 16 бит адреса фиксированы, а остальные 16 бит можно использовать для хостов, всего ~65 000 адресов.
-Использовать /8 нельзя, потому что это слишком большая сеть (~16 млн адресов), AWS такие большие VPC не поддерживает и это неуправляемо.
+В левой панели выбираю `Your VPCs` → `Create VPC`. Указываю `Name tag` - "student-vpc-k15" (где 15 — мой порядковый номер). `IPv4 CIDR block` - "10.15.0.0/16":
+  
+<img width="1891" height="764" alt="image" src="https://github.com/user-attachments/assets/ba01cac8-bb4d-449b-ba1b-27990e3645a3" />  
 
+  
+ > **Что обозначает маска /16? И почему нельзя использовать, например, /8?** Маска /16 означает, что первые 16 бит адреса фиксированы, а остальные 16 бит можно использовать для хостов, всего ~65 000 адресов. Использовать /8 нельзя, потому что это слишком большая сеть (~16 млн адресов), AWS такие большие VPC не поддерживает и это неуправляемо.
+
+
+VPC успешно создана:
+  
 <img width="1625" height="423" alt="image" src="https://github.com/user-attachments/assets/49a293a7-40f8-4603-bd41-50d65917f6e9" />
   
 ---
   
 ### Шаг 3. Создание Internet Gateway (IGW)
+  
+В левой панели выбираю `Internet Gateways` → `Create internet gateway`. Указываю имя: "student-igw-k15".
+  
+<img width="1623" height="525" alt="image" src="https://github.com/user-attachments/assets/958546fc-3f01-41f0-b087-2e6b5fcba15d" />  
 
-<img width="1623" height="525" alt="image" src="https://github.com/user-attachments/assets/958546fc-3f01-41f0-b087-2e6b5fcba15d" />
+Теперь соединяю шлюз к созданной сети. Выбираю IGW, нажимаю `Actions` → `Attach to VPC`:
+  
 <img width="1649" height="254" alt="image" src="https://github.com/user-attachments/assets/7013cd2d-52e4-4a21-a13b-2d11aa3ff000" />
+
+В списке выбираю student-vpc-k15 и подтверждаю:
+  
 <img width="1606" height="337" alt="image" src="https://github.com/user-attachments/assets/194d4520-c676-4fe0-83b7-4cbbd9339f10" />
   
 ---
@@ -34,16 +49,28 @@
 (ﾉಥ益ಥ)ﾉ
 
 #### Шаг 4.1. Создание публичной подсети
-
+  
+В левой панели выбираю `Subnets` → `Create subnet`. Указываю `VPC ID` - сеть "student-vpc-k15":
+  
 <img width="1850" height="335" alt="image" src="https://github.com/user-attachments/assets/506d3dd7-aeb7-4c09-8de0-5c1e37f015d7" />
+  
+Далее указываю `Subnet name` - "public-subnet-k15", `Availability Zone` - "us-central-1a", `IPv4 CIDR block` - "10.15.1.0/24":
+  
 <img width="1847" height="593" alt="image" src="https://github.com/user-attachments/assets/46b4f527-b057-43e2-8fef-412ecef5fc31" />  
   
  > **Является ли подсеть "публичной" на данный момент? Почему?** На данный момент подсеть ещё не является публичной, на просто создана внутри VPC, но не имеет маршрута в Internet Gateway (IGW). Чтобы подсеть стала публичной, нужно добавить в её маршрутную таблицу
 
 #### Шаг 4.2. Создание приватной подсети
+
+Нажимаю `Create subnet` ещё раз. В `VPC ID` - выбираю ту сеть "student-vpc-k15":
+  
 <img width="1866" height="340" alt="image" src="https://github.com/user-attachments/assets/e3077ade-a649-40f0-8d98-118c0b35f3b8" />
+  
+`Subnet name` - "private-subnet-k15", `Availability Zone` - выбираю "us-central-1b", `IPv4 CIDR block` - "10.15.2.0/24":
+  
 <img width="1841" height="596" alt="image" src="https://github.com/user-attachments/assets/208319dd-7f6e-441f-9cb4-1827495614b7" />
 
+  
 > **Является ли подсеть "приватной" на данный момент? Почему?** Эта подсеть является приватной, потому что у неё нет маршрута в Internet Gateway (IGW). Трафик из неё не может напрямую попасть в Интернет, а доступ возможен только внутри VPC.
   
 ---
@@ -54,9 +81,15 @@
 
 #### Шаг 5.1. Создание публичной таблицы маршрутов
 
+В левой панели выбираю `Route Tables` → `Create route table`. Указываю `Name tag` - "public-rt-k15", `VPC` - "student-vpc-k15". Подтверждаю создание таблицы:
+  
 <img width="1879" height="316" alt="image" src="https://github.com/user-attachments/assets/5ddce595-1767-46b6-9da2-c1b8eea76b3a" />
   
+Перехожу на вкладку `Routes` и нажмимаю `Edit routes` → `Add route`. Заполняю `Destination` - "0.0.0.0/0", `Target` - выбираю Internet Gateway "student-igw-k15":
+  
 <img width="1845" height="391" alt="image" src="https://github.com/user-attachments/assets/bc8fb9ad-b79e-49ce-a5d2-5392c554666e" />
+  
+
 <img width="1870" height="477" alt="image" src="https://github.com/user-attachments/assets/33163702-8765-43fc-bd24-6cf321c7182e" />
 
 > **Зачем необходимо привязать таблицу маршрутов к подсети?** Привязка нужна, чтобы определить, по каким правилам будет идти трафик из этой конкретной подсети. Если таблица не привязана, подсеть использует основную (main) таблицу — в ней нет маршрута к Интернету, поэтому трафик просто не выйдет наружу.
@@ -155,11 +188,32 @@ bastion-host:
 ---
   
 ### Шаг 10. Дополнительные задания. Подключение в приватную подсеть через Bastion Host
+
+<img width="1470" height="221" alt="image" src="https://github.com/user-attachments/assets/24fff586-5730-4ef6-a8d9-3389b8b388a4" />
+<img width="1469" height="471" alt="image" src="https://github.com/user-attachments/assets/336a1c45-0357-44a5-b88c-e552fa4f4254" />
+<img width="1468" height="520" alt="image" src="https://github.com/user-attachments/assets/ba4476e4-97c6-4056-8b8d-7ad09ce6899f" />
+<img width="1469" height="518" alt="image" src="https://github.com/user-attachments/assets/5fcd21a2-2e05-417d-9d9f-84c84731758c" />
+<img width="1467" height="746" alt="image" src="https://github.com/user-attachments/assets/d6d60f38-9a6e-48e2-ba69-2fce03fbf6f8" />
+<img width="1472" height="334" alt="image" src="https://github.com/user-attachments/assets/642da314-4e64-41d9-8a94-bd552052d9d1" />
+<img width="1480" height="104" alt="image" src="https://github.com/user-attachments/assets/eca3faf5-2ee8-4dd2-922e-33b9d81fc929" />
   
 ---
   
+### Завершение работы
+
+<img width="1900" height="272" alt="image" src="https://github.com/user-attachments/assets/d6e47714-dd90-479a-8693-51a6f63faa20" />
+<img width="1900" height="227" alt="image" src="https://github.com/user-attachments/assets/0243f66c-0356-4323-a419-dbe461114d10" />
+<img width="1896" height="158" alt="image" src="https://github.com/user-attachments/assets/c306a2f7-cf5f-4d03-a5b0-adf635e248a1" />
+<img width="1892" height="120" alt="image" src="https://github.com/user-attachments/assets/e6a9293f-01a4-460f-92dd-d18b54f085be" />
+<img width="1894" height="178" alt="image" src="https://github.com/user-attachments/assets/ffabcca9-c48a-4d7f-a75b-1befbeb79f43" />
 
   
 ## Заключение
+  
+В ходе лабораторной работы была создана и настроена облачная сеть (VPC) в AWS, включающая публичную и приватную подсети, интернет-шлюз и NAT Gateway. Настроены таблицы маршрутов и группы безопасности, обеспечивающие безопасное взаимодействие между компонентами. Были развернуты EC2-инстансы — веб-сервер, база данных и bastion host — и проверена их корректная работа. В результате освоены практические навыки построения защищённой сетевой архитектуры и подключения к приватным ресурсам через Bastion Host.
 
 ## Библиография
+1. https://github.com/MSU-Courses/cloud-computing/tree/main/_lab/03_Cloud_Networking
+2. https://eu-central-1.console.aws.amazon.com/console/home?region=eu-central-1#
+3. https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+4. https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
